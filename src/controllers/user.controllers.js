@@ -70,9 +70,10 @@ export const signIn = async (req, res) => {
 
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
-            path: '/'
+            // secure: process.env.NODE_ENV === "production",
+            secure: true,
+            sameSite: "None",
+            // path: '/'
         });
 
         res.status(200).json({
