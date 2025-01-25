@@ -25,6 +25,15 @@ const generateRefreshToken = (user) => {
 // });
 
 // Sign Up Api 
+
+// await transporter.sendMail({
+//     from: '"Umar Farooq 👻"',
+//     to: `${email}, ${process.env.EMAIL}`,
+//     subject: `Registration`,
+//     text: `Hello ${fullname} You Have Successfully Registered To Our ECommerce Stor`,
+//     html: `<br>Welcome ${fullname} <br/>We're thrilled to have you here. Explore, connect, and enjoy a seamless experience tailored just for you. If you need assistance, our team is here to help. Let's make great things happen together!</b> `,
+// });
+
 export const signUp = async (req, res) => {
     const { fullname, email, password } = req.body;
     if (!fullname) return res.status(400).json({ message: "full Name is required" });
@@ -35,13 +44,6 @@ export const signUp = async (req, res) => {
         if (user) return res.status(400).json({ message: "user already exits" });
 
         await usersModels.create({ fullname, email, password });
-        // await transporter.sendMail({
-        //     from: '"Umar Farooq 👻"',
-        //     to: `${email}, ${process.env.EMAIL}`,
-        //     subject: `Registration`,
-        //     text: `Hello ${fullname} You Have Successfully Registered To Our ECommerce Stor`,
-        //     html: `<br>Welcome ${fullname} <br/>We're thrilled to have you here. Explore, connect, and enjoy a seamless experience tailored just for you. If you need assistance, our team is here to help. Let's make great things happen together!</b> `,
-        // });
 
         res.status(200).json({ message: "user register successfully" })
     } catch (error) {
