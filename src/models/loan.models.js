@@ -3,11 +3,11 @@
     import mongoose from "mongoose";
 
     const LoanSchema = new mongoose.Schema({
-        userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'users',
-            required: true
-        },
+        // userId: {
+        //     type: mongoose.Schema.Types.ObjectId,
+        //     ref: 'users',
+        //     required: true
+        // },
         category: {
             type: String,
             required: true

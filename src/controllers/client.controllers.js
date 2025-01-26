@@ -14,12 +14,20 @@ const generateRefreshToken = (user) => {
     );
 };
 import nodemailer from "nodemailer"
+// const transporter = nodemailer.createTransport({
+//     host: 'smtp.ethereal.email',
+//     port: 587,
+//     auth: {
+//         user: 'elmer.strosin5@ethereal.email',
+//         pass: 'tBwAuJqpe3wV5kJrY1'
+//     }
+// });
 const transporter = nodemailer.createTransport({
     host: 'smtp.ethereal.email',
     port: 587,
     auth: {
-        user: 'elmer.strosin5@ethereal.email',
-        pass: 'tBwAuJqpe3wV5kJrY1'
+        user: 'jensen.kessler@ethereal.email',
+        pass: 'jGp9T9rUuJgG7dFYGy'
     }
 });
 function generatePassword(length) {
