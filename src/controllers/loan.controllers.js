@@ -10,7 +10,7 @@ export const createLoan = async (req, res) => {
         if (!loanPeriod) return res.status(400).json({ message: "loan period is required" })
         if (!guarantors) return res.status(400).json({ message: "guarantors is required" })
         const newLoan = new Loan({
-            userId,
+            // userId,
             category,
             subcategory,
             amount,

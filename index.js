@@ -6,6 +6,7 @@ import authRouter from "./src/routes/auth.routes.js"
 import cookieParser from "cookie-parser";
 import clientRoutes from "./src/routes/client.routes.js"
 import loanRoutes from "./src/routes/loan.routes.js"
+import adminrouter from "./src/routes/admin.routes.js";
 const app = express();
 
 const corsOption = {
@@ -19,6 +20,7 @@ app.use(cookieParser())
 app.use("/api/v1", authRouter)
 app.use("/api/v2", clientRoutes)
 app.use("/api/v3", loanRoutes)
+app.use("/api/v4",adminrouter)
 app.get("/", (req, res) => {
     res.send("Hello World");
 });

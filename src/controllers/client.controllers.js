@@ -2,6 +2,17 @@
 
 import User from "../models/client.models.js"
 import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
+const generateAccessToken = (user) => {
+    return jwt.sign({ email: user.email }, process.env.ACCESS_JWT_SECRET,
+        { expiresIn: '2m' }
+    );
+};
+const generateRefreshToken = (user) => {
+    return jwt.sign({ email: user.email }, process.env.REFRESH_JWT_SECRET,
+        { expiresIn: '7d' }
+    );
+};
 import nodemailer from "nodemailer"
 const transporter = nodemailer.createTransport({
     host: 'smtp.ethereal.email',
@@ -52,18 +63,39 @@ const clientLogin = async (req, res) => {
     if (!cnic) return res.status(400).json({ message: "Please Enter Your Email" });
     if (!password) return res.status(400).json({ message: "Please Enter Your Password" });
     try {
-        const existingUser = await User.findOne({ cnic });
-        if (!existingUser) {
+        const user = await User.findOne({ cnic });
+        if (!user) {
             return res.status(400).json({ message: "User does not exist" });
         };
-        const validPassword = await bcrypt.compare(password, existingUser.password); // Use existingUser.password
+        const validPassword = await bcrypt.compare(password, user.password); // Use existingUser.password
         if (!validPassword) return res.status(400).json({ message: "Incorrect Password" });
-        
-        res.status(200).json({ message: "Login successful" }); // Corrected this line
+        const refreshToken = generateRefreshToken(user)
+        const accessToken = generateAccessToken(user)
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "None",
+        });
+        res.status(200).json({ message: "Login successful", refreshToken, accessToken }); // Corrected this line
     } catch (error) {
         console.error(error); // Log the actual error
         res.status(500).json({ message: "Internal Server Error" }); // Return server error in case of an exception
     }
 };
 
-export { registerUser , clientLogin }
+const clientPasswordUpdate = async (req, res) => {
+    const { password } = req.body;
+    const userRef = req.user?._id;
+    if (!userRef) {
+        return res.status(400).json({ message: "Please login first." });
+    }
+    try {
+        await User.findByIdAndUpdate(userRef, { password });
+        res.status(200).json({ message: "Password changed successfully." });
+    } catch (error) {
+        console.error("Error updating password:", error);
+        return res.status(500).json({ message: "Internal server error." });
+    }
+};
+
+export { registerUser, clientLogin, clientPasswordUpdate }
